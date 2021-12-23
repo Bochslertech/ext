@@ -114,6 +114,11 @@ module {
             return tobj.index;
         };
 
+        public func getCollectionId(tid : TokenIdentifier) : Text {
+            let tobj = decode(tid);
+            tobj.canister;
+        };
+
         public func decode(tid : TokenIdentifier) : TokenObj {
             let bytes = Blob.toArray(Principal.toBlob(Principal.fromText(tid)));
             var index : Nat8 = 0;
@@ -130,7 +135,7 @@ module {
                 if (Array.equal(_tdscheck, tds, Nat8.equal) == false) {
                     return {
                     index = 0;
-                    canister = bytes;
+                    canister = toText(_canister);
                     };
                 };
                 };
@@ -147,7 +152,7 @@ module {
             };
             let v : TokenObj = {
                 index = bytestonat32(_token_index);
-                canister = _canister;
+                canister = toText(_canister);
             };
             return v;
         };
@@ -185,6 +190,31 @@ module {
                 Nat8.fromNat(Nat32.toNat((n) & 0xFF))
                 ];
             };
+        };
+
+        private func toText(nat8Array : [Nat8]) : Text {
+            let crc = Crc32.crc32(nat8Array);
+            let array = Array.append(crc,nat8Array);
+            let canister = Base32.encode(#RFC4648{padding=false},array);
+            let chars : [Char] = Iter.toArray(Text.toIter(canister));
+            var index : Nat8 = 0;
+            let canisterBuf = Buffer.Buffer<Char>(chars.size()+3);
+            for(char in chars.vals()){
+                index += 1;
+                if(Char.isDigit(char)){
+                    canisterBuf.add(char);
+                }else{
+                    let nat_char = Char.toNat32(char);
+                    let nat32 = nat_char + 32;
+                    let newChar = Char.fromNat32(nat32);
+                    // let newChar = Char.toLower(char);
+                    canisterBuf.add(newChar);
+                };
+                if(Nat8.rem(index,5)==0){
+                    canisterBuf.add('-');
+                };
+            };
+            Text.fromIter(canisterBuf.vals());
         };
     };
 
