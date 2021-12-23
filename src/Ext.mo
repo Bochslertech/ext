@@ -8,10 +8,13 @@ import Array "mo:base/Array";
 import Hash "mo:base/Hash";
 import Result "mo:base/Result";
 import Option "mo:base/Option";
+import Char "mo:base/Char";
+import Buffer "mo:base/Buffer";
 
 import Hex "mo:crypto/Hex";
 import CRC32 "mo:crypto/CRC32";
 import SHA224 "mo:crypto/SHA224";
+import Base32 "mo:crypto/Base32";
 import P "mo:base/Prelude";
 module {
     public type TokenIdentifier = Text;
@@ -101,7 +104,7 @@ module {
         public let hash = Text.hash;
         public type TokenObj = {
             index : TokenIndex;
-            canister : [Nat8];
+            canister : Text;
         };
         //Coz can't get principal directly, we can compare the bytes
         public func isPrincipal(tid : TokenIdentifier, p : Principal) : Bool {
@@ -193,7 +196,7 @@ module {
         };
 
         private func toText(nat8Array : [Nat8]) : Text {
-            let crc = Crc32.crc32(nat8Array);
+            let crc = CRC32.crc32(nat8Array);
             let array = Array.append(crc,nat8Array);
             let canister = Base32.encode(#RFC4648{padding=false},array);
             let chars : [Char] = Iter.toArray(Text.toIter(canister));
