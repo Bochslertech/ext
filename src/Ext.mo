@@ -110,10 +110,10 @@ module {
         //Coz can't get principal directly, we can compare the bytes
         public func isPrincipal(tid : TokenIdentifier, p : Principal) : Bool {
             let tobj = decode(tid);
-            return Blob.equal(Blob.fromArray(tobj.canister), Principal.toBlob(p));
+            return Text.equal(tobj.canister, Principal.toText(p));
         };
 
-        public func getIndex(tid : TokenIdentifier) : TokenIndex {
+        public func getTokenId(tid : TokenIdentifier) : TokenIndex {
             let tobj = decode(tid);
             return tobj.index;
         };
