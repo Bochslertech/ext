@@ -113,7 +113,7 @@ module {
             return Text.equal(tobj.canister, Principal.toText(p));
         };
 
-        public func getTokenId(tid : TokenIdentifier) : TokenIndex {
+        public func getIndex(tid : TokenIdentifier) : TokenIndex {
             let tobj = decode(tid);
             return tobj.index;
         };
