@@ -15,7 +15,7 @@ import SHA224 "mo:crypto/SHA224";
 module {
     public type TokenIdentifier = Text;
     public type TokenIndex = Nat32;
-    public type Balance = Nat;
+    public type Balance = Nat64;
     public type Memo = Blob;
     public type AccountIdentifier = Text;
     public type SubAccount = [Nat8];
