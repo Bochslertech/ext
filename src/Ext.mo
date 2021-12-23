@@ -10,6 +10,7 @@ import Result "mo:base/Result";
 import Option "mo:base/Option";
 import Char "mo:base/Char";
 import Buffer "mo:base/Buffer";
+import Iter "mo:base/Iter";
 
 import Hex "mo:crypto/Hex";
 import CRC32 "mo:crypto/CRC32";
