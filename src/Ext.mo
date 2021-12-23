@@ -12,6 +12,7 @@ import Option "mo:base/Option";
 import Hex "mo:crypto/Hex";
 import CRC32 "mo:crypto/CRC32";
 import SHA224 "mo:crypto/SHA224";
+import P "mo:base/Prelude";
 module {
     public type TokenIdentifier = Text;
     public type TokenIndex = Nat32;
@@ -216,7 +217,7 @@ module {
         public func fromBytes(data : [Nat8], sa : ?SubAccount) : AccountIdentifier {
             var _sa : [Nat8] = SUBACCOUNT_ZERO;
             if (Option.isSome(sa)) {
-            _sa := Option.unwrap(sa);
+            _sa := _unwrap(sa);
             };
             var hash : [Nat8] = SHA224.sha224(Array.append(Array.append(ads, data), _sa));
             var crc : [Nat8] = CRC32.crc32(hash);
@@ -283,5 +284,10 @@ module {
             allowance : Balance;
             token : TokenIdentifier;
         };
+    };
+    private func _unwrap<T>(x : ?T) : T =
+    switch x {
+      case null { P.unreachable() };
+      case (?x_) { x_ };
     };
 }
