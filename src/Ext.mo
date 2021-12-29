@@ -69,6 +69,17 @@ module {
             subaccount : ?SubAccount;
         };
 
+        public type BatchTransferRequest = {
+            from : User;
+            sumAmount : Balance;
+            to : [User];
+            amount : [Balance];
+            token : TokenIdentifier;
+            memo : Memo;
+            notify : Bool;
+            subaccount : ?SubAccount;
+        };
+
         public type TransferResponse = Result<Balance, {
             #Unauthorized : AccountIdentifier;
             #InsufficientBalance;
